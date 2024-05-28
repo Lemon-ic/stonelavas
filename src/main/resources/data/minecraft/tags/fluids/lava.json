@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values":
+  [
+    "stonelavas:granite_lava",
+    "stonelavas:flowing_granite_lava",
+    "stonelavas:diorite_lava",
+    "stonelavas:flowing_diorite_lava",
+    "stonelavas:andesite_lava",
+    "stonelavas:flowing_andesite_lava",
+    "stonelavas:deepslate_lava",
+    "stonelavas:flowing_deepslate_lava",
+    "stonelavas:calcite_lava",
+    "stonelavas:flowing_calcite_lava",
+    "stonelavas:tuff_lava",
+    "stonelavas:flowing_tuff_lava"
+  ]
+}
