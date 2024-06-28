@@ -16,10 +16,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraftforge.fluids.ForgeFlowingFluid;
 
 import java.util.Optional;
 
-public class AbstractLavaFluid extends FlowingFluid {
+public class AbstractLavaFluid extends ForgeFlowingFluid {
+
+    protected AbstractLavaFluid(Properties properties) {
+        super(properties);
+    }
+
     @Override
     public Fluid getFlowing() {
         return null;
@@ -35,40 +41,23 @@ public class AbstractLavaFluid extends FlowingFluid {
         return null;
     }
 
-    public void animateTick(Level p_230567_, BlockPos p_230568_, FluidState p_230569_, RandomSource p_230570_) {
-        BlockPos blockpos = p_230568_.above();
-        if (p_230567_.getBlockState(blockpos).isAir() && !p_230567_.getBlockState(blockpos).isSolidRender(p_230567_, blockpos)) {
-            if (p_230570_.nextInt(100) == 0) {
-                double d0 = (double)p_230568_.getX() + p_230570_.nextDouble();
-                double d1 = (double)p_230568_.getY() + 1.0D;
-                double d2 = (double)p_230568_.getZ() + p_230570_.nextDouble();
-                p_230567_.addParticle(ParticleTypes.LAVA, d0, d1, d2, 0.0D, 0.0D, 0.0D);
-                p_230567_.playLocalSound(d0, d1, d2, SoundEvents.LAVA_POP, SoundSource.BLOCKS, 0.2F + p_230570_.nextFloat() * 0.2F, 0.9F + p_230570_.nextFloat() * 0.15F, false);
-            }
 
-            if (p_230570_.nextInt(200) == 0) {
-                p_230567_.playLocalSound((double)p_230568_.getX(), (double)p_230568_.getY(), (double)p_230568_.getZ(), SoundEvents.LAVA_AMBIENT, SoundSource.BLOCKS, 0.2F + p_230570_.nextFloat() * 0.2F, 0.9F + p_230570_.nextFloat() * 0.15F, false);
-            }
-        }
-
-    }
-
-    public void randomTick(Level p_230572_, BlockPos p_230573_, FluidState p_230574_, RandomSource p_230575_) {
-        if (p_230572_.getGameRules().getBoolean(GameRules.RULE_DOFIRETICK)) {
-            int i = p_230575_.nextInt(3);
+    public void randomTick(Level level, BlockPos pBlockPos, FluidState fluidState, RandomSource randomSource) {
+        if (level.getGameRules().getBoolean(GameRules.RULE_DOFIRETICK)) {
+            int i = randomSource.nextInt(3);
             if (i > 0) {
-                BlockPos blockpos = p_230573_;
+                BlockPos blockpos = pBlockPos;
 
                 for(int j = 0; j < i; ++j) {
-                    blockpos = blockpos.offset(p_230575_.nextInt(3) - 1, 1, p_230575_.nextInt(3) - 1);
-                    if (!p_230572_.isLoaded(blockpos)) {
+                    blockpos = blockpos.offset(randomSource.nextInt(3) - 1, 1, randomSource.nextInt(3) - 1);
+                    if (!level.isLoaded(blockpos)) {
                         return;
                     }
 
-                    BlockState blockstate = p_230572_.getBlockState(blockpos);
+                    BlockState blockstate = level.getBlockState(blockpos);
                     if (blockstate.isAir()) {
-                        if (this.hasFlammableNeighbours(p_230572_, blockpos)) {
-                            p_230572_.setBlockAndUpdate(blockpos, net.minecraftforge.event.ForgeEventFactory.fireFluidPlaceBlockEvent(p_230572_, blockpos, p_230573_, Blocks.FIRE.defaultBlockState()));
+                        if (this.hasFlammableNeighbours(level, blockpos)) {
+                            level.setBlockAndUpdate(blockpos, net.minecraftforge.event.ForgeEventFactory.fireFluidPlaceBlockEvent(level, blockpos, pBlockPos, Blocks.FIRE.defaultBlockState()));
                             return;
                         }
                     } else if (blockstate.blocksMotion()) {
@@ -77,13 +66,13 @@ public class AbstractLavaFluid extends FlowingFluid {
                 }
             } else {
                 for(int k = 0; k < 3; ++k) {
-                    BlockPos blockpos1 = p_230573_.offset(p_230575_.nextInt(3) - 1, 0, p_230575_.nextInt(3) - 1);
-                    if (!p_230572_.isLoaded(blockpos1)) {
+                    BlockPos blockpos1 = pBlockPos.offset(randomSource.nextInt(3) - 1, 0, randomSource.nextInt(3) - 1);
+                    if (!level.isLoaded(blockpos1)) {
                         return;
                     }
 
-                    if (p_230572_.isEmptyBlock(blockpos1.above()) && this.isFlammable(p_230572_, blockpos1, Direction.UP)) {
-                        p_230572_.setBlockAndUpdate(blockpos1.above(), net.minecraftforge.event.ForgeEventFactory.fireFluidPlaceBlockEvent(p_230572_, blockpos1.above(), p_230573_, Blocks.FIRE.defaultBlockState()));
+                    if (level.isEmptyBlock(blockpos1.above()) && this.isFlammable(level, blockpos1, Direction.UP)) {
+                        level.setBlockAndUpdate(blockpos1.above(), net.minecraftforge.event.ForgeEventFactory.fireFluidPlaceBlockEvent(level, blockpos1.above(), pBlockPos, Blocks.FIRE.defaultBlockState()));
                     }
                 }
             }
@@ -100,7 +89,7 @@ public class AbstractLavaFluid extends FlowingFluid {
         return false;
     }
     private boolean isFlammable(LevelReader level, BlockPos pos, Direction face) {
-        return pos.getY() >= level.getMinBuildHeight() && pos.getY() < level.getMaxBuildHeight() && !level.hasChunkAt(pos) ? false : level.getBlockState(pos).isFlammable(level, pos, face);
+        return (pos.getY() < level.getMinBuildHeight() || pos.getY() >= level.getMaxBuildHeight() || level.hasChunkAt(pos)) && level.getBlockState(pos).isFlammable(level, pos, face);
     }
     public ParticleOptions getDripParticle() {
         return ParticleTypes.DRIPPING_LAVA;

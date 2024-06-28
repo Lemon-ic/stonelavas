@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/StoneLavas.main.iml" filepath="$PROJECT_DIR$/.idea/modules/StoneLavas.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/StoneLavas.test.iml" filepath="$PROJECT_DIR$/.idea/modules/StoneLavas.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.gmail.lemonicplus.StoneLavas.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.gmail.lemonicplus.StoneLavas.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.gmail.lemonicplus.StoneLavas.test.iml" filepath="$PROJECT_DIR$/.idea/modules/com.gmail.lemonicplus.StoneLavas.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/untitled.main.iml" filepath="$PROJECT_DIR$/.idea/modules/untitled.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/untitled.test.iml" filepath="$PROJECT_DIR$/.idea/modules/untitled.test.iml" />
     </modules>

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:cobbled_deepslate"
+    },
+    "V": {
+      "tag": "stonelavas:lava_buckets"
+    },
+    "U": {
+      "item": "minecraft:bucket"
+    }
+  },
+  "pattern": [
+    "###",
+    "#V#",
+    "#U#"
+  ],
+  "result": {
+    "item": "stonelavas:deepslate_lava_bucket"
+  },
+  "show_notification": true
+}

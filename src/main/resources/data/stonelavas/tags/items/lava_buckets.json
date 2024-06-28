@@ -1,0 +1,16 @@
+{
+  "values":
+  [
+    "minecraft:lava_bucket",
+    "stonelavas:andesite_lava_bucket",
+    "stonelavas:calcite_lava_bucket",
+    "stonelavas:deepslate_lava_bucket",
+    "stonelavas:diorite_lava_bucket",
+    "stonelavas:granite_lava_bucket",
+    "stonelavas:tuff_lava_bucket",
+    "stonelavas:asurine_lava_bucket",
+    "stonelavas:crimsite_lava_bucket",
+    "stonelavas:ochrum_lava_bucket",
+    "stonelavas:veridium_lava_bucket"
+  ]
+}

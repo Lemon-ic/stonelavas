@@ -1,20 +1,22 @@
 package com.gmail.lemonicplus.stonelavas;
 
+import com.gmail.lemonicplus.stonelavas.lava.init.StoneLavaBlocks;
+import com.gmail.lemonicplus.stonelavas.lava.init.StoneLavaBuckets;
+import com.gmail.lemonicplus.stonelavas.lava.init.StoneLavaFluids;
+import com.gmail.lemonicplus.stonelavas.lava.init.StoneLavaTypes;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -27,58 +29,42 @@ public class StoneLavas {
 
     public static final String MODID = "stonelavas";
 
-    private static final Logger LOGGER = LogUtils.getLogger();
-
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
-
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
-
-    public static final DeferredRegister<CreativeModeTab> STONELAVAS_CREATIVE_TAB = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
-
-
-
-  //  public static final RegistryObject<CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
-  //          .withTabsBefore(CreativeModeTabs.COMBAT)
-  //          .icon(() -> EXAMPLE_ITEM.get().getDefaultInstance())
-  //          .displayItems((parameters, output) -> {
-  //          output.accept(EXAMPLE_ITEM.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
-  //          }).build());
 
     public StoneLavas() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         StoneLavaBlocks.register(modEventBus);
+        StoneLavaBuckets.register(modEventBus);
+        StoneLavaTypes.register(modEventBus);
+        StoneLavaFluids.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
 
         modEventBus.addListener(this::addCreative);
+        modEventBus.addListener(this::init);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event) {
-
+    public void init(final FMLCommonSetupEvent event){
+        StoneLavaFluids.registerInteractions();
     }
 
-    // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
-
-    }
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
-
-    }
-
-    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents {
-
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event)
-        {
-
+        if(event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES){
+            event.accept(StoneLavaBuckets.ANDESITE_LAVA_BUCKET);
+            event.accept(StoneLavaBuckets.CALCITE_LAVA_BUCKET);
+            event.accept(StoneLavaBuckets.DEEPSLATE_LAVA_BUCKET);
+            event.accept(StoneLavaBuckets.DIORITE_LAVA_BUCKET);
+            event.accept(StoneLavaBuckets.GRANITE_LAVA_BUCKET);
+            event.accept(StoneLavaBuckets.TUFF_LAVA_BUCKET);
+            if(ModList.get().isLoaded("create")) {
+                event.accept(StoneLavaBuckets.ASURINE_LAVA_BUCKET);
+                event.accept(StoneLavaBuckets.CRIMSITE_LAVA_BUCKET);
+                event.accept(StoneLavaBuckets.OCHRUM_LAVA_BUCKET);
+                event.accept(StoneLavaBuckets.VERIDIUM_LAVA_BUCKET);
+            }
         }
     }
 }

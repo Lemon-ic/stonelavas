@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "create:veridium"
+    },
+    "V": {
+      "tag": "stonelavas:lava_buckets"
+    },
+    "U": {
+      "item": "minecraft:bucket"
+    }
+  },
+  "pattern": [
+    "###",
+    "#V#",
+    "#U#"
+  ],
+  "result": {
+    "item": "stonelavas:veridium_lava_bucket"
+  },
+  "show_notification": true
+}
